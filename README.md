@@ -8,8 +8,8 @@ Bundles an entire app into a single file, so that it can be hashed and [subresou
 
 Structure:
 
-[./wallet/src/App.svelte](./wallet/src/App.svelte) The inner app that is built.
-[./src/routes/+page.svelte](./src/routes/+page.svelte) The outer app that loads the inner app.
+- [./wallet/src/App.svelte](./wallet/src/App.svelte) The inner app that is built.
+- [./src/routes/+page.svelte](./src/routes/+page.svelte) The outer app that loads the inner app.
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), build the [./wallet](./wallet/) and start a development server using [just](https://just.systems/man/en/):
 
