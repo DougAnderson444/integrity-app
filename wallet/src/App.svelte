@@ -3,8 +3,11 @@
 	import workerFile from './worker.js?raw';
 
 	onMount(async () => {
-		const worker = new Worker(new URL(`data:application/javascript,${encodeURIComponent(workerFile)}`));
-			type: 'module'
-		});
+		const worker = new Worker(
+			new URL(`data:application/javascript,${encodeURIComponent(workerFile)}`),
+			{
+				type: 'module'
+			}
+		);
 	});
 </script>
