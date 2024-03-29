@@ -30,7 +30,11 @@ jobs:
         env:
           BASE_PATH: '/integrity-wallet'
         run: |
-          cd wallet && npm run build && cd .. && npm run build
+          cd wallet
+          npm i
+          npm run build
+          cd .. 
+          npm run build
           touch docs/.nojekyll
 
       - name: Upload Artifacts
