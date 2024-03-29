@@ -26,15 +26,11 @@ jobs:
       - name: Install dependencies
         run: npm install && cd wallet && npm install
 
-      - name: Create .nojekyll
-        run: touch docs/.nojekyll
-
       - name: build
         env:
           BASE_PATH: '/integrity-wallet'
         run: |
           cd wallet && npm run build && cd .. && npm run build
-          touch docs/.nojekyll
 
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v1
