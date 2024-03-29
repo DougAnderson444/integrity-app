@@ -15,7 +15,8 @@ const config = {
 			strict: true
 		}),
 		appDir: 'build'
-	}
+	},
+	preprocess: [vitePreprocess()]
 };
 
 export default config;
