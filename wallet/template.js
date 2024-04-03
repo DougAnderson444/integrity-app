@@ -4,6 +4,16 @@
  */
 const encoded = `%%index%%`;
 
-// decode from base64 then write to document
-// let decoded = atob(encoded);
-document.write(encoded);
+let decoded = atob(encoded);
+
+var chunkSize = 1024;
+var index = 0;
+
+while (index < decoded.length) {
+	var chunk = decoded.slice(index, Math.min(index + chunkSize, decoded.length));
+	document.write(chunk);
+	index += chunkSize;
+}
+
+//close
+document.close();
