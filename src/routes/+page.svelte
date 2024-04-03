@@ -3,7 +3,7 @@
 	import { base } from '$app/paths';
 	import htmlRaw from '../../wallet/dist/index.html?raw';
 
-	import { encodeURLSafe, decodeURLSafe } from '@stablelib/base64';
+	import { encodeURLSafe } from '@stablelib/base64';
 
 	/**
 	 * @type {string}
