@@ -80,6 +80,10 @@
 	});
 </script>
 
+<svelte:head>
+	<script src="https://cdn.tailwindcss.com"></script>
+</svelte:head>
+
 <h1>Welcome to Secure Bookmark Warp Wallet</h1>
 <a id="el_link" bind:this={el_link} class="installer">Drag me into tab bar</a>
 
