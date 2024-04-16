@@ -19,7 +19,7 @@ jobs:
 
       - name: Set VITE_BASE
         run: |
-          echo "VITE_BASE=https://\${GITHUB_REPOSITORY_OWNER,,}.github.io/\${GITHUB_REPOSITORY,,}/" >> $GITHUB_ENV
+          echo "VITE_BASE=https://${GITHUB_REPOSITORY_OWNER,,}.github.io/${GITHUB_REPOSITORY,,}/" >> $GITHUB_ENV
 
       - name: Install Node.js
         uses: actions/setup-node@v3
