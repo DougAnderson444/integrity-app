@@ -1,7 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
-	import htmlRaw from '../../wallet/dist/index.html?raw';
 
 	import { encodeURLSafe } from '@stablelib/base64';
 
@@ -30,8 +29,11 @@
 	let integrity;
 
 	onMount(async () => {
-		// fetch the binary so we can use btoa to convert to base64
-		const appRaw = await fetch(`${base}/wallet.js`).then((res) => res.text());
+		const name = 'innerApp.js';
+		// fetch the text
+		const appRaw = await fetch(`${base}/${name}`).then((res) => res.text());
+
+		console.log(appRaw);
 
 		// generate sha256 Subresource Integrity of app.js (appRaw)
 		// and use it as integrity attribute of script tag
@@ -46,7 +48,7 @@
 			window.location.origin +
 			window.location.pathname.replace('index.html', '').replace(/\/$/, '');
 		dataUrl =
-			`data:text/html,<script src="${path}/wallet.js" integrity="${integrity}" crossorigin></scr` +
+			`data:text/html,<script src="${path}/${name}" integrity="${integrity}" crossorigin></scr` +
 			`ipt><!-` +
 			'-';
 
