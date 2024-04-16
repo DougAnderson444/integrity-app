@@ -2,7 +2,13 @@
 
 _Always know the code hasn't changed._
 
-Uses [subresource integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) at the app layer to ensure the code is what you expect. 
+By getting the browser to check the [subresource integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) at the app layer, we can ensure the code is what you expect. 
+
+## Use
+
+Once your project is built and hosted, anyone going to the URL will get a data URL to drag or copy into the browser's address bar. This will load the outer app, which will check the integrity of the inner app before loading it.
+
+Then, users just bookmark the data URL and bring that up any time they want to use the site. If they want to upgrade, they just need to refresh the original website and update their bookmarks.
 
 ## Developing
 
@@ -40,4 +46,9 @@ cat wallet.js | openssl dgst -sha256 -binary | openssl base64 -A
 To check the integrity of the app, you can use the `sri` command:
 
 ```bash
+just sri
+```
 
+## References
+
+Original concept by Robin Linus [Secure Bookmark](https://github.com/coins/secure-bookmark).
