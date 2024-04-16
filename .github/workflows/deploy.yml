@@ -21,6 +21,10 @@ jobs:
         run: |
           echo "VITE_BASE=https://${GITHUB_REPOSITORY_OWNER,,}.github.io/${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
 
+      - name: Set BASE_PATH
+        run: |
+          echo "BASE_PATH=/${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
@@ -32,7 +36,7 @@ jobs:
 
       - name: build
         env:
-          BASE_PATH: '/${GITHUB_REPOSITORY#*/}'
+          BASE_PATH: ${{ env.BASE_PATH }}
           VITE_BASE: ${{ env.VITE_BASE }}
         run: |
           cd inner-app && npm run build && cd .. && npm run build
