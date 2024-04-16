@@ -7,6 +7,9 @@ dev: build-inner
 build: build-inner
    npm run build
 
+preview: build
+  npm run preview -- --open
+
 # Subresource Integrity Check
 sri:
   cat static/wallet.js | openssl dgst -sha256 -binary | openssl base64 -A
