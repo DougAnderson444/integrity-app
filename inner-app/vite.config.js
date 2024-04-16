@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 // import sri from '@small-tech/vite-plugin-sri';
 import { createHash } from 'crypto';
@@ -7,19 +7,37 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 import path from 'path';
 
+const devBase = 'http://localhost:4175';
+let base;
+const env = loadEnv('', process.cwd(), '');
+
 // https://vitejs.dev/config/
-export default defineConfig({
-	plugins: [readOutputFiles(), svelte()],
-	build: {
-		minify: false
+export default defineConfig(({ command, mode }) => {
+	if (command == 'serve') {
+		base = env.DEV_BASE || devBase;
+	} else {
+		base = env.VITE_BASE || env.DEV_BASE || devBase;
 	}
+
+	return {
+		plugins: [readOutputFiles(), svelte()],
+		build: {
+			minify: false
+		},
+		server: {
+			origin: base,
+			fs: {
+				strict: false
+			}
+		}
+	};
 });
 
 const calculateIntegrityHashes = async (element) => {
 	let source;
 	let attributeName = element.attribs.src ? 'src' : 'href';
 	const resourcePath = element.attribs[attributeName];
-	console.log('resourcePath', resourcePath);
+
 	if (resourcePath.startsWith('http')) {
 		// Load remote source from URL.
 		source = await (await fetch(resourcePath)).buffer();
@@ -33,9 +51,6 @@ const calculateIntegrityHashes = async (element) => {
 	}
 	const algo = 'sha384';
 	const integrity = createHash(algo).update(source).digest().toString('base64');
-	// print the last 2 lines of the source:
-	console.log('source', source.toString().split('\n').slice(-2).join('\n'));
-	console.log('integrity', integrity);
 	element.attribs.integrity = `${algo}-${integrity}`;
 };
 
@@ -83,7 +98,18 @@ function readOutputFiles() {
 				const scriptElement = $(element);
 				const scriptSrc = scriptElement.attr('src');
 				const scriptPath = path.join(outputDir, scriptSrc);
-				const scriptContent = fs.readFileSync(scriptPath, 'utf8');
+				let scriptContent = fs.readFileSync(scriptPath, 'utf8');
+
+				// find matches for /assets/ in the scriptContent
+				let matches = scriptContent.match(/"\/assets\//g);
+				console.log('matches:', matches);
+
+				// insert ${base} before `assets/` in the source code scriptContent
+				// so that the innerApp can load the correct urls
+				scriptContent = scriptContent.replace(/"\/assets\//g, `"${base}/assets/`);
+				// write the modified scriptContent back to the file
+				fs.writeFileSync(scriptPath, scriptContent);
+
 				const algo = 'sha384';
 				const integrity = createHash(algo).update(scriptContent).digest().toString('base64');
 				scriptElement.attr('integrity', `${algo}-${integrity}`);
@@ -93,7 +119,14 @@ function readOutputFiles() {
 				const linkElement = $(element);
 				const linkHref = linkElement.attr('href');
 				const linkPath = path.join(outputDir, linkHref);
-				const linkContent = fs.readFileSync(linkPath, 'utf8');
+				let linkContent = fs.readFileSync(linkPath, 'utf8');
+
+				// insert ${base} before `assets/` in the source code linkContent
+				// so that the innerApp can load the correct urls
+				linkContent = linkContent.replace(/"\/assets\//g, `"${base}/assets/`);
+				// write the modified linkContent back to the file
+				fs.writeFileSync(linkPath, linkContent);
+
 				const algo = 'sha384';
 				const integrity = createHash(algo).update(linkContent).digest().toString('base64');
 				linkElement.attr('integrity', `${algo}-${integrity}`);
