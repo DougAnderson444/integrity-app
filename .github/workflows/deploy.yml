@@ -17,6 +17,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Set VITE_BASE
+        run: |
+          echo "VITE_BASE=https://\${GITHUB_REPOSITORY_OWNER,,}.github.io/\${GITHUB_REPOSITORY,,}/" >> $GITHUB_ENV
+
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
@@ -29,7 +33,7 @@ jobs:
       - name: build
         env:
           BASE_PATH: '/integrity-wallet'
-          VITE_BASE: 'https://${{ github.repository_owner,, }}.github.io/integrity-wallet'
+          VITE_BASE: ${{ env.VITE_BASE }}
         run: |
           cd inner-app && npm run build && cd .. && npm run build
           touch docs/.nojekyll
