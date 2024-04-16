@@ -19,7 +19,7 @@ jobs:
 
       - name: Set VITE_BASE
         run: |
-          echo "VITE_BASE=https://${GITHUB_REPOSITORY_OWNER,,}.github.io/${GITHUB_REPOSITORY#*/@L}" >> $GITHUB_ENV
+          echo "VITE_BASE=https://${GITHUB_REPOSITORY_OWNER,,}.github.io/${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
 
       - name: Install Node.js
         uses: actions/setup-node@v3
@@ -32,7 +32,7 @@ jobs:
 
       - name: build
         env:
-          BASE_PATH: '/integrity-wallet'
+          BASE_PATH: '/${GITHUB_REPOSITORY#*/}'
           VITE_BASE: ${{ env.VITE_BASE }}
         run: |
           cd inner-app && npm run build && cd .. && npm run build
