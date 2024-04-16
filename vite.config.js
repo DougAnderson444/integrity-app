@@ -50,10 +50,19 @@ export default defineConfig(({ command, mode }) => {
 	// add the base to the urls in static/innerApp.js tags
 	// so that the innerApp can load the correct urls
 	const innerAppPath = `static/${name}`;
-	console.log('Writing innerApp.js', innerApp);
 	let innerAppFile = fs.readFileSync(innerAppPath, 'utf-8');
 	innerAppFile = innerAppFile.replace(/"\/assets\//g, `"${base}/assets/`);
 	fs.writeFileSync(innerAppPath, innerAppFile);
+
+	// also replace assets string in any .js files in `static/`
+	const assetsPath = 'static/assets';
+	fs.readdirSync(assetsPath).forEach((file) => {
+		if (file.endsWith('.js')) {
+			let content = fs.readFileSync(`${assetsPath}/${file}`, 'utf-8');
+			content = content.replace(/"\/assets\//g, `"${base}/assets/`);
+			fs.writeFileSync(`${assetsPath}/${file}`, content);
+		}
+	});
 
 	return {
 		plugins: [sveltekit()],
