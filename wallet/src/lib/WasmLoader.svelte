@@ -2,6 +2,7 @@
 	// a component to send data to a plugin
 	import { onMount, tick, createEventDispatcher } from 'svelte';
 	import { Wurbo, wurboIn } from 'wurbo';
+	import { $init as init, provider } from './graph/graph.js';
 
 	export let pluginFile;
 
@@ -30,8 +31,7 @@
 
 	onMount(async () => {
 		// init the graph utility
-		const g = await import('./graph/graph.js');
-		g.$init.then(() => (Graph = new g.provider.Graph()));
+		init.then(() => (Graph = new provider.Graph()));
 		api = location.hash.substring(1);
 	});
 
