@@ -4,7 +4,8 @@ import { loadEnv } from 'vite';
 import fs from 'fs';
 import { encode } from '@stablelib/base64';
 
-const devBase = 'http://localhost:4175';
+import { devConfig } from './config.js';
+const strictPort = true;
 
 let index = fs.readFileSync('./inner-app/dist/index.html', 'utf-8');
 const template = fs.readFileSync('./inner-app/template.js', 'utf-8');
@@ -42,9 +43,9 @@ export default defineConfig(({ command, mode }) => {
 	const env = loadEnv(mode, process.cwd(), '');
 
 	if (command == 'serve') {
-		base = devBase;
+		base = devConfig.devBase;
 	} else {
-		base = env.VITE_BASE || devBase;
+		base = env.VITE_BASE || devConfig.devBase;
 	}
 
 	// add the base to the urls in static/innerApp.js tags
@@ -70,10 +71,14 @@ export default defineConfig(({ command, mode }) => {
 			include: ['src/**/*.{test,spec}.{js,ts}']
 		},
 		server: {
-			origin: base,
+			origin: `http://${devConfig.host}:${devConfig.port}`,
+			host: devConfig.host,
+			port: devConfig.port,
+			strictPort,
 			fs: {
 				strict: false
 			}
-		}
+		},
+		preview: { port: devConfig.port }
 	};
 });

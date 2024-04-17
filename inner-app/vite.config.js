@@ -6,17 +6,18 @@ import cheerio from 'cheerio';
 import fetch from 'node-fetch';
 import fs from 'fs';
 import path from 'path';
+import { devConfig } from '../config.js';
 
-const devBase = 'http://localhost:4175';
+const devBase = devConfig.devBase;
 let base;
 const env = loadEnv('', process.cwd(), '');
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
 	if (command == 'serve') {
-		base = env.DEV_BASE || devBase;
+		base = devBase;
 	} else {
-		base = env.VITE_BASE || env.DEV_BASE || devBase;
+		base = env.VITE_BASE || devBase;
 	}
 
 	return {
