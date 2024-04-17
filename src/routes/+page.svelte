@@ -3,6 +3,7 @@
 	import { base } from '$app/paths';
 
 	import { encodeURLSafe } from '@stablelib/base64';
+	import Finger from '$lib/Finger.svelte';
 
 	/**
 	 * @type {string}
@@ -27,6 +28,8 @@
 	 */
 	let hash;
 	let integrity;
+	// Test whether it's isSafari
+	let isSafari = false;
 
 	onMount(async () => {
 		const name = 'innerApp.js';
@@ -55,7 +58,8 @@
 		el_link.href = dataUrl;
 
 		// FIXME: This device detection is quite fragile
-		const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+		// const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+		isSafari = navigator.userAgent.includes('Safari') && !navigator.userAgent.includes('Chrome');
 		const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;
 
 		// if safari simply click the link
@@ -82,15 +86,24 @@
 	});
 </script>
 
-<svelte:head>
-	<script src="https://cdn.tailwindcss.com"></script>
-</svelte:head>
+<main class="flex flex-col px-8 py-2 w-screen">
+	<h1 class="text-2xl font-semibold my-4">Welcome to Integrity Apps, a Secure Bookmark Webpage</h1>
+	{#if !isSafari}
+		<!-- Safari can just click the link -->
+		<Finger />
+	{/if}
+	<a id="el_link" bind:this={el_link} class="border-2 rounded-lg shadow-md px-4 py-2 w-full"
+		>Drag me into tab bar</a
+	>
 
-<h1>Welcome to Secure Bookmark Warp Wallet</h1>
-<a id="el_link" bind:this={el_link} class="installer">Drag me into tab bar</a>
+	<div id="el_notification" bind:this={el_notification} hidden class="">
+		✅ Data URL copied to clipboard. Paste it into your browser's address bar.
+	</div>
 
-<div id="el_notification" bind:this={el_notification} hidden>
-	Data URL copied to clipboard. Paste it into your browser's address bar.
-</div>
-<br />
-<!-- {hash)} -->
+	<h2 class="text-xl font-semibold my-4">How does this work?</h2>
+	<p class="my-2">
+		When you copy/paste or drag the link into the address bar, the app will be loaded. This is a
+		secure way to load the app because the app code cannot change behind your back. Once the data
+		URL has loaded, you can bookmark it and use it in the future.
+	</p>
+</main>
