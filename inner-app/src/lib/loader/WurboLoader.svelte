@@ -3,6 +3,7 @@
 	import { onMount, tick, createEventDispatcher } from 'svelte';
 	import { Wurbo, wurboIn } from 'wurbo';
 	import { $init as init, provider } from './graph/graph.js';
+	import Progress from './Progress.svelte';
 
 	export let pluginFile;
 
@@ -38,16 +39,9 @@
 	$: if (pluginFile) {
 		// name without the .wasm on the end, because we will also store our data here
 		let path = ['apps', pluginFile.name.replace(/\.wasm$/, ''), 'wasm'];
-		(async () => {
-			try {
-				load(pluginFile.bytes);
-
-				pluginFile = null; // reset loader state
-				fileinput.value = null; // reset file input
-			} catch (error) {
-				console.error('error saving plugin', { error });
-			}
-		})();
+		load(pluginFile.bytes).catch((error) => {
+			console.error('error loading plugin', { error });
+		});
 	}
 
 	const onFileSelected = (e) => {
@@ -112,6 +106,9 @@
 			tag: 'all-content',
 			val: { api }
 		});
+
+		if (pluginFile) pluginFile = null; // reset loader state
+		if (fileinput) fileinput.value = null; // reset file input
 	}
 
 	// Once the HTML is rendered and the module is loaded, we can activate the event emitters
@@ -121,49 +118,40 @@
 			await tick();
 			// once the DOM has our elements loaded, we can activate the aggregated event emitters
 			wurbo.aggregation();
-			console.log('*** wurbo evt listeners should be activated ***');
 		})();
 </script>
 
-<input
-	style="display:none"
-	type="file"
-	accept=".wasm, .wasm"
-	on:change={(e) => onFileSelected(e)}
-	bind:this={fileinput}
-/>
-<div
-	class="flex w-fit m-2 justify-center cursor-pointer border border-green-400 rounded-md px-4 py-2 shadow"
-	on:keypress={() => {
-		fileinput.click();
-	}}
-	on:click={() => {
-		fileinput.click();
-	}}
->
-	<div class="flex">
-		Load wurbo *.wasm file (must export <span class="font-mono mx-1 px-1 bg-amber-100 rounded-lg"
-			>wurbo-in</span
-		>
-		and import
-		<span class="font-mono mx-1 px-1 bg-amber-100 rounded-lg">wurbo-out</span>
-		)
-	</div>
-</div>
-
-<!-- Display bytes -->
-{#if pluginFile}
-	<div class="flex flex-col">
-		<div class="flex-1 flex-row bg-green-50/10 p-2">File loaded</div>
-		<div class="flex-1 flex-row">{@html pluginFile}</div>
+{#if renderedHTML}
+	{@html renderedHTML}
+{:else if pluginFile}
+	<Progress />
+{:else}
+	<input
+		style="display:none"
+		type="file"
+		accept=".wasm, .wasm"
+		on:change={(e) => onFileSelected(e)}
+		bind:this={fileinput}
+	/>
+	<div
+		class="flex w-fit m-2 justify-center cursor-pointer border border-green-400 rounded-md px-4 py-2 shadow"
+		on:keypress={() => {
+			fileinput.click();
+		}}
+		on:click={() => {
+			fileinput.click();
+		}}
+	>
+		<div class="flex">
+			Load wurbo *.wasm file (must export <span class="font-mono mx-1 px-1 bg-amber-100 rounded-lg"
+				>wurbo-in</span
+			>
+			and import
+			<span class="font-mono mx-1 px-1 bg-amber-100 rounded-lg">wurbo-out</span>
+			)
+		</div>
 	</div>
 {/if}
-
-<div>
-	{#if renderedHTML}
-		{@html renderedHTML}
-	{/if}
-</div>
 
 <style lang="postcss">
 	@tailwind base;
