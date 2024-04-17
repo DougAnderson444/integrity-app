@@ -103,7 +103,6 @@ function readOutputFiles() {
 
 				// find matches for /assets/ in the scriptContent
 				let matches = scriptContent.match(/"\/assets\//g);
-				console.log('matches:', matches);
 
 				// insert ${base} before `assets/` in the source code scriptContent
 				// so that the innerApp can load the correct urls
