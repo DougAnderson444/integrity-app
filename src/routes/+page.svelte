@@ -112,7 +112,7 @@
 		these secrets, both of which can change code without you knowing. But the
 		<a
 			href="https://github.com/coins/secure-bookmark?tab=readme-ov-file#traditional-solutions-do-not-work"
-			>traditional solutions do not work</a
+			target="_blank">traditional solutions do not work</a
 		> and this a more secure alternative.
 	</p>
 
@@ -148,11 +148,12 @@
 
 	<h2>What is the app?</h2>
 	<p>
-		The Integrity App uses a <a href="https://github.com/DougAnderson444/wurbo">Wurbo</a> Loader by default,
-		which means you can safely load any WebAsembly App that implements the Wurbo interfaces. Wurbo is
-		a cutting edge Wasm framework that uses a minimal amount of JavaScript to make the WebAssembly Component
-		interactive, but not enough to make it dangerous. It's just enough JavaScript to run the WebAssembly
-		Component, nothing else!
+		The Integrity App uses a <a href="https://github.com/DougAnderson444/wurbo" target="_blank"
+			>Wurbo</a
+		> Loader by default, which means you can safely load any WebAsembly App that implements the Wurbo
+		interfaces. Wurbo is a cutting edge Wasm framework that uses a minimal amount of JavaScript to make
+		the WebAssembly Component interactive, but not enough to make it dangerous. It's just enough JavaScript
+		to run the WebAssembly Component, nothing else!
 	</p>
 
 	<h2>What is the Wurbo Loader?</h2>
