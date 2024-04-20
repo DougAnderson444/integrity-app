@@ -103,8 +103,8 @@
 		✅ Data URL copied to clipboard. Paste it into your browser's address bar.
 	</div>
 
-	<details>
-		<summary>FAQs</summary>
+	<details class="my-4">
+		<summary class="my-4">FAQs</summary>
 
 		<h2>Why do we need this?</h2>
 		<p>
