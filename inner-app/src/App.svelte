@@ -1,5 +1,5 @@
 <script>
-	import { WurboLoader } from './lib/loader/index.js';
+	import { WurboLoader } from 'wurbo';
 </script>
 
 <main>
