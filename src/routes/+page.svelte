@@ -104,7 +104,7 @@
 	</div>
 
 	<details class="my-4">
-		<summary class="my-4">FAQs</summary>
+		<summary class="my-4 cursor-pointer">FAQs</summary>
 
 		<h2>Why do we need this?</h2>
 		<p>
