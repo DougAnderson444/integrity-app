@@ -12,4 +12,4 @@ preview: build
 
 # Subresource Integrity Check
 sri:
-  cat static/wallet.js | openssl dgst -sha256 -binary | openssl base64 -A
+  cat static/innerApp.js | openssl dgst -sha256 -binary | openssl base64 -A
