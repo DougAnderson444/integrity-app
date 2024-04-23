@@ -1,6 +1,5 @@
 import { defineConfig, loadEnv } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
-// import sri from '@small-tech/vite-plugin-sri';
 import { createHash } from 'crypto';
 import cheerio from 'cheerio';
 import fetch from 'node-fetch';
@@ -12,7 +11,6 @@ const devBase = devConfig.devBase;
 let base;
 const env = loadEnv('', process.cwd(), '');
 
-// https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
 	if (command == 'serve') {
 		base = devBase;
@@ -34,55 +32,7 @@ export default defineConfig(({ command, mode }) => {
 	};
 });
 
-const calculateIntegrityHashes = async (element) => {
-	let source;
-	let attributeName = element.attribs.src ? 'src' : 'href';
-	const resourcePath = element.attribs[attributeName];
-
-	if (resourcePath.startsWith('http')) {
-		// Load remote source from URL.
-		source = await (await fetch(resourcePath)).buffer();
-	} else {
-		// Load local source from bundle.
-		const resourcePathWithoutLeadingSlash = element.attribs[attributeName].slice(1);
-		const bundleItem = bundle[resourcePathWithoutLeadingSlash];
-		source = bundleItem.code || bundleItem.source;
-		// ensure there is no trailing new line (\n) in source
-		source = source.replace(/\n$/, '');
-	}
-	const algo = 'sha384';
-	const integrity = createHash(algo).update(source).digest().toString('base64');
-	element.attribs.integrity = `${algo}-${integrity}`;
-};
-
-function sri() {
-	return {
-		name: 'vite-plugin-sri',
-		enforce: 'post',
-		apply: 'build',
-
-		async transformIndexHtml(html, context) {
-			const bundle = context.bundle;
-
-			const $ = cheerio.load(html);
-			$.prototype.asyncForEach = async function (callback) {
-				for (let index = 0; index < this.length; index++) {
-					await callback(this[index], index, this);
-				}
-			};
-
-			// Implement SRI for scripts and stylesheets.
-			const scripts = $('script').filter('[src]');
-			const stylesheets = $('link[rel=stylesheet]').filter('[href]');
-
-			await scripts.asyncForEach(calculateIntegrityHashes);
-			await stylesheets.asyncForEach(calculateIntegrityHashes);
-
-			return $.html();
-		}
-	};
-}
-
+// Poached from import sri from '@small-tech/vite-plugin-sri'; // which doesn't work with my code
 function readOutputFiles() {
 	return {
 		name: 'read-output-files', // this name will show up in warnings and errors
