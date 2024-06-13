@@ -28,6 +28,9 @@ export default defineConfig(({ command, mode }) => {
 			fs: {
 				strict: false
 			}
+		},
+		worker: {
+			format: 'es'
 		}
 	};
 });
