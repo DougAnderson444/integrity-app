@@ -14,7 +14,7 @@ Then, users just bookmark the data URL and bring that up any time they want to u
 
 Structure:
 
-- [./inner-app/src/App.svelte](./wallet/src/App.svelte) The inner app that is built and hashed.
+- [./inner-app/src/App.svelte](./inner-app/src/App.svelte) The inner app that is built and hashed.
 - [./src/routes/+page.svelte](./src/routes/+page.svelte) The outer app that loads the inner app only if the hash matches.
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), build the [./inner-app](./inner-app/) and start a development server using [just](https://just.systems/man/en/):
@@ -40,7 +40,7 @@ You can preview the production build with `npm run preview`.
 To manually [generate the SRI](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity#tools_for_generating_sri_hashes) for a file, use openssl:
 
 ```bash
-cat wallet.js | openssl dgst -sha256 -binary | openssl base64 -A
+cat static/innerApp.js | openssl dgst -sha256 -binary | openssl base64 -A
 ```
 
 To check the integrity of the app, you can use the `sri` command:
