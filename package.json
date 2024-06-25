@@ -1,11 +1,18 @@
 {
-	"name": "integrity-app",
-	"version": "0.0.1",
-	"private": true,
+	"name": "@douganderson444/integrity-app",
+	"version": "0.1.0",
+	"homepage": "https://github.com/DougAnderson444/integrity-app#readme",
+	"bugs": {
+		"url": "https://github.com/DougAnderson444/integrity-app",
+		"email": "douganderson444+github-integrity-app@gmail.com"
+	},
+	"description": "A SvelteKit app with built-in subresource integrity",
+	"license": "MIT",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
+		"package": "svelte-kit sync && svelte-package && publint",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
 		"test": "npm run test:integration && npm run test:unit",
@@ -14,12 +21,43 @@
 		"test:integration": "playwright test",
 		"test:unit": "vitest"
 	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"svelte": "./dist/index.js"
+		},
+		"./Integrity.svelte": {
+			"types": "./dist/Integrity.svelte.d.ts",
+			"svelte": "./dist/Integrity.svelte"
+		},
+		"./Format.svelte": {
+			"types": "./dist/Format.svelte.d.ts",
+			"svelte": "./dist/Format.svelte"
+		}
+	},
+	"typesVersions": {
+		">4.0": {
+			"*": [
+				"./dist/*"
+			]
+		}
+	},
+	"files": [
+		"dist",
+		"!dist/**/*.test.*",
+		"!dist/**/*.spec.*"
+	],
+	"peerDependencies": {
+		"@sveltejs/kit": "^2.0.0",
+		"svelte": "^4.0.0"
+	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
 		"@stablelib/base64": "^1.0.1",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/package": "^2.3.2",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/eslint": "^8.56.0",
 		"autoprefixer": "^10.4.19",
@@ -29,11 +67,12 @@
 		"postcss": "^8.4.38",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
+		"publint": "^0.2.8",
 		"svelte": "^4.2.7",
 		"svelte-check": "^3.6.0",
 		"tailwindcss": "^3.4.3",
 		"typescript": "^5.0.0",
-		"vite": "^5.0.3",
+		"vite": "^5.3.1",
 		"vitest": "^1.2.0"
 	},
 	"type": "module"
