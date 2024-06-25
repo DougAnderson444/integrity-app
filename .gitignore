@@ -11,3 +11,4 @@ vite.config.ts.timestamp-*
 /docs
 static/assets
 static/innerApp.js
+/dist
