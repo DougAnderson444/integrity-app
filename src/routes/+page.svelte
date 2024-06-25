@@ -3,4 +3,4 @@
 	import Format from '$lib/Format.svelte';
 </script>
 
-<Integrity wrapper={Format} />
+<Integrity wrapper={Format} name={'innerApp.js'} />
