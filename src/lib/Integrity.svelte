@@ -1,61 +1,58 @@
 <script>
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
-
 	import { encodeURLSafe } from '@stablelib/base64';
 	import Finger from '$lib/Finger.svelte';
 	import Format from '$lib/Format.svelte';
 
 	/**
-	 * Default wrapper is the Format component
+	 * Default format wrapper is the Format component
 	 * @type {SvelteComponent}
 	 */
 	export let wrapper = Format;
 
 	/**
+	 * The name of the inner app javascript file to fetch
 	 * @type {string}
 	 */
-	let path;
+	export let name = 'innerApp.js';
 	/**
+	 * The base path to the app. Defaults to Svelte's `$app/paths.base`
 	 * @type {string}
 	 */
-	let dataUrl;
+	export let basePath = base;
 	/**
+	 * The variable that is bound to the link element
 	 * @type {HTMLAnchorElement}
 	 */
 	let el_link;
 
 	/**
+	 * The variable that is bound to the notification element
 	 * @type {HTMLDivElement}
 	 */
 	let el_notification;
 
-	/**
-	 * @type {Uint8Array}
-	 */
-	let hash;
-	let integrity;
 	// Test whether it's isSafari
 	let isSafari = false;
 
 	onMount(async () => {
-		const name = 'innerApp.js';
 		// fetch the text
-		const appRaw = await fetch(`${base}/${name}`).then((res) => res.text());
+		const appRaw = await fetch(`${basePath}/${name}`).then((res) => res.text());
 
 		// generate sha256 Subresource Integrity of app.js (appRaw)
 		// and use it as integrity attribute of script tag
 		// to prevent MITM attacks
 		let algo = 'SHA-256';
 		const hashBuffer = await crypto.subtle.digest(algo, new TextEncoder().encode(appRaw));
-		hash = new Uint8Array(hashBuffer);
+		let hash = new Uint8Array(hashBuffer);
 
-		integrity = algo.toLowerCase().replace('-', '') + `-${encodeURLSafe(hash)}`;
+		let integrity = algo.toLowerCase().replace('-', '') + `-${encodeURLSafe(hash)}`;
 
-		path =
+		let path =
 			window.location.origin +
 			window.location.pathname.replace('index.html', '').replace(/\/$/, '');
-		dataUrl =
+		let dataUrl =
 			`data:text/html,<script src="${path}/${name}" integrity="${integrity}" crossorigin></scr` +
 			`ipt><!-` +
 			'-';
