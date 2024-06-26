@@ -13,7 +13,8 @@
 
 <!-- CSS animation should sweep the pointer up to middle of the top of the screen (top-0), disappear, then start back to origin and sweep up again infinitely -->
 
-<style>
+<style lang="postcss">
+	@tailwind utilities;
 	@keyframes sweep {
 		0% {
 			transform: translateY(0);

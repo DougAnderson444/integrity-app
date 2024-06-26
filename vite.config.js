@@ -3,6 +3,8 @@ import { defineConfig } from 'vitest/config';
 import { loadEnv } from 'vite';
 import fs from 'fs';
 import { encode } from '@stablelib/base64';
+// TODO: Once Tailwindcss v4 lands, we can use the official plugin
+import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 
 import { devConfig } from './config.js';
 const strictPort = true;
@@ -66,7 +68,7 @@ export default defineConfig(({ command, mode }) => {
 	});
 
 	return {
-		plugins: [sveltekit()],
+		plugins: [sveltekit(), purgeCss()],
 		test: {
 			include: ['src/**/*.{test,spec}.{js,ts}']
 		},

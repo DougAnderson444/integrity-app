@@ -108,3 +108,7 @@
 		</div>
 	</svelte:fragment>
 </svelte:component>
+
+<style lang="postcss">
+	@tailwind utilities;
+</style>

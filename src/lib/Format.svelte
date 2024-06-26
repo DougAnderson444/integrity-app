@@ -76,7 +76,8 @@
 	</details>
 </main>
 
-<style>
+<style lang="postcss">
+	@tailwind utilities;
 	h2 {
 		@apply text-xl font-semibold mt-8 mb-2;
 	}
